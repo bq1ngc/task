@@ -4,16 +4,18 @@ class Time
 {
 public:
 	void set(int hour, int min, int second) {
-		if (0 <= hour <= 24 && 0 <= min <= 60 && 0<=second<=60) {
+		if (hour <= 23 && min <= 59 && second <= 59 && hour*min*second >= 0) {
 			h = hour; m = min; s = second;
 		}
 		else
 		{
-			cout << "you inputed a mistake!" << endl;
+			cout << "You inputed a bad date!" << endl;
+			h = -1;
 		}
 	}
 	void print() {
-		cout << h << ':' << m << ':' << s << endl;
+		if (h == -1) { exit; }
+		else { cout << h << ':' << m << ':' << s << endl; }
 	}
 
 private:
@@ -23,6 +25,7 @@ private:
 int main() {
 	Time a;
 	int hour, min, second;
+	cout << "Please input date in one by one!" << endl;
 	cin >> hour; cin >> min; cin >> second;
 	a.set(hour, min, second);
 	a.print();
