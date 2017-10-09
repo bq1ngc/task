@@ -4,7 +4,10 @@ using namespace std;
 class student {
 public:
 	int mu = 3;
-	student(string n, string nam, double M, double E, double C, double t, double ave);
+	student(){
+		string n = "02128", nam = "æ¨è¿‡"; double M = 10.0, E = 10.0, C = 10.0, t = 10.0, ave = 10.0;
+		num = n;  name = nam;  English = E;   Math = M;   Computer = C;  summ = t;  averagee = ave;
+	};
 	double sum();
 	double average();
 	double print();
@@ -18,15 +21,10 @@ private:
 student::student(string n, string nam, double M, double E, double C, double t = 10.0, double ave = 10.0) {
 	num = n;  name = nam;  English = E;   Math = M;   Computer = C;  summ = t;  averagee = ave;
 }
-student stu[3] = {
-	student("02128","Ñî¹ı",64,56,74),
-	student("02120","ÕÔÃ÷",51,63,84),
-	student("02119","ÕÅÀîÃô",76,87,56),
-};
+student *stu = new student["02128", "æ¨è¿‡", 64, 56, 74];
 double student::sum() { return(English + Math + Computer); }
 double student::average() { return(sum() / 3.0); }
 double student::print() {
-	cout << "Ñ§ºÅ" << "\t" << "ĞÕÃû" << "\t" << "Ó¢Óï" << "\t" << "ÊıÑ§" << "\t" << "¼ÆËã»ú" << "\t" << "×Ü·Ö" << "\t" << "Æ½¾ù·Ö" << endl;
 	cout << num << "\t" << name << "\t" << Math << "\t" << English << "\t" << Computer << "\t" << sum() << "\t" << average() << endl;
 	return 0;
 }
@@ -43,7 +41,8 @@ void student::get_reg_num() {
 void student::set_stu_inf() {
 	string n, nam; double M, E, C;
 	for (int i = 0; i<mu; i++) {
-		cin >> n >> nam >> E >> M >> C;
+		cout << "ç¬¬" << i + 1 << "ä¸ª:" << endl;
+		cin >> n >> nam >> M >> E >> C;
 		stu[i].num = n;
 		stu[i].name = nam;
 		stu[i].English = E;
@@ -58,22 +57,24 @@ string student::seach(string nn) {
 			stu[i].print();
 		}
 	}
-	return 0;
+	char *over = "Over";
+	return over;
 }
 void main() {
 	string nn;
-	cout << "ĞèÒªÊäÈë¶àÉÙÌõĞÅÏ¢£¿:";
+	cout << "éœ€è¦è¾“å…¥å¤šå°‘æ¡ä¿¡æ¯ï¼Ÿ:";
 	stu[0].set_mu();
-	cout << "ÏÖÔÚÊäÈëÑ§ÉúĞÅÏ¢:(¸ñÊ½:Ñ§ºÅ[»Ø³µ]ĞÕÃû[»Ø³µ]Ó¢Óï[»Ø³µ]ÊıÑ§[»Ø³µ]¼ÆËã»ú[»Ø³µ])" << endl;
+	cout << "ç°åœ¨è¾“å…¥å­¦ç”Ÿä¿¡æ¯:(æ ¼å¼:å­¦å·[å›è½¦]å§“å[å›è½¦]è‹±è¯­[å›è½¦]æ•°å­¦[å›è½¦]è®¡ç®—æœº[å›è½¦])" << endl;
 	stu[0].set_stu_inf();
+	cout << "å­¦å·" << "\t" << "å§“å" << "\t" << "æ•°å­¦" << "\t" << "è‹±è¯­" << "\t" << "è®¡ç®—æœº" << "\t" << "æ€»åˆ†" << "\t" << "å¹³å‡åˆ†" << endl;
 	for (int i = 0; i<stu[0].mu; i++) {
 		stu[i].print();
 	}
-	cout << "ÏÖÔÚÄã¿ÉÒÔÍ¨¹ıĞÕÃûÕÒÑ§ºÅ£º";
+	cout << "ç°åœ¨ä½ å¯ä»¥é€šè¿‡å§“åæ‰¾å­¦å·ï¼š";
 	stu[0].get_reg_num();
-	cout << "ÏÖÔÚÄã¿ÉÒÔÍ¨¹ıÑ§ºÅÕÒµ½¸ÃÑ§ÉúµÄÈ«²¿ĞÅÏ¢£º";
+	cout << "ç°åœ¨ä½ å¯ä»¥é€šè¿‡å­¦å·æ‰¾åˆ°è¯¥å­¦ç”Ÿçš„å…¨éƒ¨ä¿¡æ¯ï¼š";
 	cin >> nn;
 	stu[0].seach(nn);
 	system("pause");
 }
-//Òı·¢µÄÒì³£: 0xC0000005 : ¶ÁÈ¡Î»ÖÃ 0x00000000 Ê±·¢Éú·ÃÎÊ³åÍ»¡£
+//å¼•å‘çš„å¼‚å¸¸: 0xC0000005 : è¯»å–ä½ç½® 0x00000000 æ—¶å‘ç”Ÿè®¿é—®å†²çªã€‚ï¼ˆå·²è§£å†³ï¼Œæ˜¯è¿”å›å€¼è¯»å–äº†å®ƒä¸è¯¥è¯»å–äº†å†…å­˜ï¼‰
