@@ -1,0 +1,4 @@
+<loading hidden="{{loadingHidden}}">加载中😂...</loading>
+<view class='act'>
+ <rich-text nodes="{{arrayo.body}}"></rich-text>
+</view>

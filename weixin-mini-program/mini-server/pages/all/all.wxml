@@ -1,0 +1,5 @@
+<view class='act' wx:for="{{array}}" data-id="{{item.pid}}" bindtap="tapNameo">
+ <image class='img' mode='aspectFill' src="{{item.img}}"></image>
+ <view class='tall'><text>{{item.title}}</text></view>
+ <view class='actt'><text>{{item.body}}</text></view>
+</view>

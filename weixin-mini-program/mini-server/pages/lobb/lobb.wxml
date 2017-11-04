@@ -1,0 +1,3 @@
+<view wx:for="{{array}}">
+{{item.time}}:  <text>{{item.body}}</text>
+</view>

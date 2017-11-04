@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/all/all",
+    "pages/lobb/lobb",
+    "pages/post/post"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "XinRoom.cn",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#dddddd",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/all/all",
+        "iconPath": "image/icon_API.png",
+        "selectedIconPath": "image/icon_API_HL.png",
+        "text": "Blog"
+      },
+      {
+        "pagePath": "pages/lobb/lobb",
+        "iconPath": "image/icon_API.png",
+        "selectedIconPath": "image/icon_API_HL.png",
+        "text": "Lab"
+      }
+    ]
+  }
+}
