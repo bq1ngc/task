@@ -57,9 +57,9 @@ var ut=n.indexOf("Android ")
 if(ut>-1){var pt=parseFloat(n.substr(ut+8))
 if(4.4>pt&&(ct=!1,pt>=4))for(var vt=[/ Chrome\//,/ UCBrowser\//,/ Firefox\//,/ Windows Phone /],ht=0;ht<vt.length;ht++)if(vt[ht].test(n)){ct=!0
 break}}}return{supported:ct,init:O,on:D,setTimeout:q,setInterval:M,clearTimeout:N,xhr:I,addPageEvent:B,removePageEvent:F,addEvent:H,removeEvent:R}}(document,location,navigator.userAgent)
-/*百度统计*自行替换hm*/
+/*鐧惧害缁熻*鑷鏇挎崲hm*/
 var _hmt=_hmt || [];(function(){var hm=document.createElement("script");hm.src="//hm.baidu.com/hm.js?be30ae751487acd59bdfa0a2634aae46";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})()
 /*end*/
-instantclick.on('change', function () {/*需要执行的js语句*/
- _hmt.push(["_trackPageview", location.pathname + location.search])  //百度统计
+instantclick.on('change', function () {/*闇�瑕佹墽琛岀殑js璇彞*/
+ _hmt.push(["_trackPageview", location.pathname + location.search])  //鐧惧害缁熻
 }), instantclick.init()
