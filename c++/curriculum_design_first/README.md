@@ -2,22 +2,23 @@
 
 ## 设计目的
 
-参加本课程设计的同学已经学习了《C 语言程序设计》和《面向对象可视化编程》两门课程，现在需要通过一个相对实际性的开发过程来巩固与鉴定一下学习成效，可以查看离实际需要还有哪些部分没有完全掌握，需要加强；另外本课程设计可以提供一个稍微具有规模的程序开发的例子，让同学们可以体会到程序的构思、编码以及调试的完整过程，最后并总结课程设计的过程。
+参加本课程设计的同学已经学习了《C语言程序设计》和《面向对象可视化编程》两门课程，现在需要通过一个相对实际性的开发过程来巩固与鉴定一下学习成效，可以查看离实际需要还有哪些部分没有完全掌握，需要加强；另外本课程设计可以提供一个稍微具有规模的程序开发的例子，让同学们可以体会到程序的构思、编码以及调试的完整过程，最后并总结课程设计的过程。
 
 ## 课程设计的内容与设计思路
 
-本课程设计要求编制一个简单的图形编辑的系统，可以添加、修改与删除图形元素，以形成图形画面。
-**具体要求如下：**
-0、支持图元为简单的6种图形，图上的黑点给图元的原点，w 为宽度width ，h 为高度height，r 为半径radius，a 为字符角度angle。这些为这些图元需要保存的参数，另外，每个图元是否填充，用什么模式填充。
-![xinroom](/static/图片1.jpg)
-1、采用单文档方式，文档中存储图形画面的各个图元数据，视图负责图形的绘制。
-2、文档支持图形的序列化（连载），提供新建、打开、保存等操作。
-3、视图除了绘制图形，还提供图形交互，能够按住Ctrl 键再鼠标左键单击来创建图元，鼠标左键双击编辑修改图元属性，鼠标右键双击删除图元。
-4 、图元创建与修改时的参数由参数对话框来编辑。创建时以鼠标左击时光标的所在位置作为基点来创建图元。
-![xinroom](/static/图片2.jpg)
-5、使用图元基础类shape 作为所有六个图元类的基类，设计派生各个具体的图形类，要求支持上述功能。
-![xinroom](/static/图片3.jpg)
-![xinroom](/static/图片4.jpg)
+本课程设计要求编制一个简单的图形编辑的系统，可以添加、修改与删除图形元素，以形成图形画面。  
+**具体要求如下：**  
+0. 支持图元为简单的6种图形，图上的黑点给图元的原点，w 为宽度width ，h 为高度height，r 为半径radius，a 为字符角度angle。这些为这些图元需要保存的参数，另外，每个图元是否填充，用什么模式填充。
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片1.jpg)
+
+1. 采用单文档方式，文档中存储图形画面的各个图元数据，视图负责图形的绘制。
+2. 文档支持图形的序列化（连载），提供新建、打开、保存等操作。
+3. 视图除了绘制图形，还提供图形交互，能够按住Ctrl 键再鼠标左键单击来创建图元，鼠标左键双击编辑修改图元属性，鼠标右键双击删除图元。
+4. 图元创建与修改时的参数由参数对话框来编辑。创建时以鼠标左击时光标的所在位置作为基点来创建图元。
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片2.jpg)
+5. 使用图元基础类shape 作为所有六个图元类的基类，设计派生各个具体的图形类，要求支持上述功能。
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片3.jpg)
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片4.jpg)
 
 ## 设计思路
 
@@ -25,13 +26,13 @@
 
 ## 效果如下
 
-![xinroom](/static/图片5.jpg)
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片5.jpg)
 
 ## 主要文件和函数
 
 ### Shape.h
 
-‘’‘
+```
 class CShape : public CObject
 {
 virtual void Draw(CDC*pDC) = 0;//绘制图元
@@ -52,13 +53,15 @@ virtual void Draw(CDC*pDC) = 0;//绘制图元
     };
 ...
 }
-’‘’
+```
 
 ### Shape.cpp
 
+。。。
+
 ### DrawView.cpp
 
-’‘’
+```
 void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 {
     if ((nFlags&MK_CONTROL) == MK_CONTROL)//Ctrl键按下
@@ -128,11 +131,11 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 
     CScrollView::OnRButtonDblClk(nFlags, point);
 }
-‘’‘
+```
 
 ### Type.cpp //设置对话框
 
-’‘’
+```
 BOOL CType::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
@@ -187,4 +190,4 @@ void CType::OnCbnSelchangeTytype()
     }
 }
 ...
-‘’‘
+```
