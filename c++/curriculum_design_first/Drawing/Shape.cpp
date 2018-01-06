@@ -513,13 +513,13 @@ void CText::Draw(CDC* pDC)//绘制图形函数
 	pNewFont->CreateFont(height,width,angle*10,0,200,FALSE,0,FALSE,ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH&FF_SWISS,"Aerial");
 	pOldFont = (CFont *)pDC->SelectObject(pNewFont);
 	pDC->SetTextColor(BorderColor);
-	pDC->TextOutA(OrgX, OrgY, "Yangtze University!");
+	pDC->TextOutA(OrgX, OrgY, "CText CText!");
 
 }
 
 bool CText::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ( ( pnt.y-OrgY+tan(((angle/180.0))*M_PI)*(pnt.x-OrgX))>=0 && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))<= 0  && ( pnt.y-OrgY+tan(((angle/180.0))*M_PI)*(pnt.x-OrgX))<=height/cos(angle/180.0*M_PI) && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))>= (-(width+OrgX)/sin(angle/180.0*M_PI)))
+	if ( ( pnt.y-OrgY+tan((angle/180.0)*M_PI)*(pnt.x-OrgX))>=0 && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))<= 0  && ( pnt.y-OrgY+tan((angle/180.0)*M_PI)*(pnt.x-OrgX))<=height/cos(angle/180.0*M_PI) && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))>= (-(width*12 /*字符数，动态字符可用GetLength()获得*/)/sin(angle/180.0*M_PI)))
 		return true;
 	else
 		return false;

@@ -1,6 +1,8 @@
 # 第一次c++课程设计
 
->本项目使用VS2010创建，VS2017库版本，可兼容VS2010，VS2010在项目属性修改版本即可
+>本项目使用VS2010创建，VS2017库版本，可兼容VS2010，VS2010在项目属性修改平台工具集版本即可  
+  
+*如要下载项目，返回到task根项目下载整个仓库，从中解压本目录后再运行*
 
 ## 设计目的
 
@@ -26,7 +28,12 @@
 
 ## 设计思路
 
-如上图所示，主要通过CShape的虚函数统一实现，用对话框类设置相关数据。
+如上图所示，主要通过CShape的虚函数统一实现，用对话框类设置相关数据。  
+解释一下整个运行框架：  
+**Shape**类存放图形的绘制、修改等函数；**DrawingDoc**用于存放图形数据序列；**DrawingView**用于绘制图像、响应用户操作；**Type**是新建的图源设置对话框的类，用于存放用户设置数据  
+  
+**一个简单的思路图**  
+![xinroom](https://raw.githubusercontent.com/XinRoom/task/master/c++/curriculum_design_first/static/图片6.jpg)
 
 ## 效果如下
 
@@ -72,7 +79,7 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
     {
         if(dlg.DoModal()==IDOK)
         {
-            int index = ((CDrawingApp *)AfxGetApp())->m_index;
+            int index = ((CDrawingApp *)AfxGetApp())->m_index;  //获取索引
             switch (index)
             {
             case 0:
