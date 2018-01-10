@@ -204,3 +204,73 @@ void CType::OnCbnSelchangeTytype()
 }
 ...
 ```
+
+### DrawView.cpp添加的一个消息 //监听鼠标的移动，实现拖动效果
+
+```
+void CDrawingView::OnMouseMove(UINT nFlags, CPoint point)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    CClientDC dc(this);
+    CPoint pntLogical = point;
+    OnPrepareDC(&dc);
+    dc.DPtoLP(&pntLogical);
+    CString x, y;
+    x.Format(_T("%d"), pntLogical.x);//整型转字符串  
+    y.Format(_T("%d"), pntLogical.y);
+    CString text = "像素点:" + x + "," + +y;
+
+    CMainFrame *pFrame = (CMainFrame*)AfxGetMainWnd();
+    pFrame->m_wndStatusBar.SetPaneText(0, text);//修改原有的状态栏上就绪一栏的信息    
+    //pFrame->m_wndStatusBar.SetPaneText(1, "打开成功！");//修改原有的状态栏上CAP一栏的信息    
+    //pFrame->m_wndStatusBar.SetPaneText(2, "打开成功！");//修改原有的状态栏上NUM一栏的信息  
+    //pFrame->m_wndStatusBar.SetPaneText(3, "打开成功！");//修改原有的状态栏上SCRL一栏的信息  
+
+    if (isDown&&cp != NULL) {
+        pFrame->m_wndStatusBar.SetPaneText(3, "down!");
+        int mw, mh, ma; CString mt;
+
+        CDrawingDoc* pDoc = GetDocument();
+        ASSERT_VALID(pDoc);
+        if (!pDoc)	return;
+
+        CClientDC dc(this);
+        CPoint pntLogical = point;
+        OnPrepareDC(&dc);
+        dc.DPtoLP(&pntLogical);
+
+
+        cp->GetDate(mw, mh, mt ,ma);
+        int ww = fabs(pntLogical.x - cp->OrgX), hh = fabs(pntLogical.y - cp->OrgY), aa = ma; CString tt = mt;
+
+        cp->SetDate(cp->OrgX, cp->OrgY,ww, hh, aa);
+        pDoc->SetModifiedFlag();
+        pDoc->UpdateAllViews(NULL);
+
+
+    }
+    else {
+        pFrame->m_wndStatusBar.SetPaneText(3, "up!");
+        cp = NULL;
+        p1.x = 0;
+    };
+
+    if (isRDown&&crp != NULL)
+    {
+        pFrame->m_wndStatusBar.SetPaneText(3, "down!");
+        CDrawingDoc* pDoc = GetDocument();
+        ASSERT_VALID(pDoc);
+        if (!pDoc)	return;
+
+        crp->OrgX = pntLogical.x, crp->OrgY = pntLogical.y;
+        pDoc->SetModifiedFlag();
+        pDoc->UpdateAllViews(NULL);
+    }
+    else {
+        pFrame->m_wndStatusBar.SetPaneText(3, "up!");
+        crp = NULL;
+    }
+
+    CScrollView::OnMouseMove(nFlags, point);
+}
+```
