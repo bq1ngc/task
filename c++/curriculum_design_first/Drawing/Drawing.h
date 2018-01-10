@@ -18,7 +18,7 @@ class CDrawingApp : public CWinAppEx
 {
 public:
 	CDrawingApp();
-	int m_index;  //index值传递
+	//int m_index;  //index值传递
 
 // 重写
 public:

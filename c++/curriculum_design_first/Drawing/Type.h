@@ -12,7 +12,8 @@ public:
 	virtual ~CType();
 	COLORREF color_Fill;  //color
 	COLORREF color_Line;  //
-
+	int indexx;
+	bool isOR = 0;
 // 对话框数据
 	enum { IDD = IDD_Type };
 
@@ -39,4 +40,5 @@ public:
 	afx_msg void OnBnClickedLinecolorbutton();
 	afx_msg void OnBnClickedFillcolorbutton();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	CString m_Text;
 };

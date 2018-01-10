@@ -30,10 +30,11 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+	CMFCStatusBar     m_wndStatusBar;
+
 protected:  // 控件条嵌入成员
 	CMFCMenuBar       m_wndMenuBar;
 	CMFCToolBar       m_wndToolBar;
-	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
 
 // 生成的消息映射函数

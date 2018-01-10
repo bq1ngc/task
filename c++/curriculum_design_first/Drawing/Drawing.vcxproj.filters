@@ -34,7 +34,7 @@
     <None Include="res\Toolbar256.bmp">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="..\..\2017\Drawing\Drawing\Drawing.reg" />
+    <None Include="Drawing.reg" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawing.h">

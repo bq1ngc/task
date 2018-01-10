@@ -14,6 +14,8 @@ protected: // 仅从序列化创建
 // 特性
 public:
 	CDrawingDoc* GetDocument() const;
+	bool isDown = 0, isRDown = 0;
+	CPoint p1;
 
 // 操作
 public:
@@ -41,12 +43,17 @@ protected:
 // 生成的消息映射函数
 protected:
 	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+//	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+//	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // DrawingView.cpp 中的调试版本

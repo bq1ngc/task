@@ -83,7 +83,7 @@ void CSquare::Draw(CDC* pDC)//绘制图形函数
 
 bool CSquare::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if( (OrgX-width/2<=pnt.x && pnt.x<=OrgX+width/2) && ( OrgY-width/2 <= pnt.y && pnt.y <= OrgY+width/2 ) )
+	if( (OrgX-width/2- BorderWidth/2 <=pnt.x && pnt.x<=OrgX+ width/2 + BorderWidth/2) && ( OrgY- width/2 - BorderWidth/2 <= pnt.y && pnt.y <= OrgY+ width/2 + BorderWidth/2) )
 		return true;
 	else
 		return false;
@@ -94,6 +94,11 @@ void CSquare::SetDate(int x, int y, int w, int h, int a)
 	OrgY = y;
 	width = w;
 };
+void CSquare::GetDate(int& w, int& h, CString& t, int &a) 
+{
+	w = width;
+	h = width;
+}
 
 
 //矩形
@@ -161,7 +166,7 @@ void CRectangle::Draw(CDC* pDC)//绘制图形函数
 		brush.CreateSolidBrush(FillColor);
 	pOldBrush = (CBrush*)pDC->SelectObject(&brush);
 
-	pDC->Rectangle(OrgX - width / 2, OrgY - width / 2, OrgX + width / 2, OrgY + height / 2);
+	pDC->Rectangle(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
@@ -169,7 +174,7 @@ void CRectangle::Draw(CDC* pDC)//绘制图形函数
 
 bool CRectangle::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ((OrgX - width / 2 <= pnt.x && pnt.x <= OrgX + width / 2) && (OrgY - height / 2 <= pnt.y && pnt.y <= OrgY + height / 2))
+	if ( OrgX - width / 2 - BorderWidth/2 <= pnt.x && pnt.x <= OrgX + width / 2+ BorderWidth/2 && OrgY - height / 2- BorderWidth/2 <= pnt.y && pnt.y <= OrgY + height / 2+ BorderWidth/2)
 		return true;
 	else
 		return false;
@@ -181,6 +186,11 @@ void CRectangle::SetDate(int x, int y, int w, int h, int a)
 	width = w;
 	height = h;
 };
+void CRectangle::GetDate(int& w, int& h, CString& t, int& a)
+{
+	w = width;
+	h = height;
+}
 
 
 
@@ -262,7 +272,7 @@ void CTriangle::Draw(CDC* pDC)//绘制图形函数
 
 bool CTriangle::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ((OrgX - width/2 <= pnt.x && pnt.x <= OrgX + width/2) && ((OrgY - 2 * height / 3) <= pnt.y && pnt.y <= OrgY + height / 3) && ( pnt.y-OrgY+(2.0/3.0)*height+2.0*height/width*(pnt.x-OrgX) )>=0 && (pnt.y - OrgY + (2.0 / 3.0)*height - 2.0*height / width * (pnt.x - OrgX)) >= 0)
+	if ((OrgX - width/2 - BorderWidth/2 <= pnt.x && pnt.x <= OrgX + width/2+ BorderWidth/2) && (OrgY - 2 * (height + BorderWidth) / 3 <= pnt.y && pnt.y <= OrgY + (height+ BorderWidth) / 3) && ( pnt.y-OrgY+(2.0/3.0)*(height + BorderWidth) +2.0*(height + BorderWidth) / (width + BorderWidth)*(pnt.x-OrgX) ) >=0 && (pnt.y - OrgY + (2.0 / 3.0)*(height+ BorderWidth) - 2.0*(height + BorderWidth) / (width + BorderWidth) * (pnt.x - OrgX)) >= 0)
 		return true;
 	else
 		return false;
@@ -274,6 +284,11 @@ void CTriangle::SetDate(int x, int y, int w, int h, int a)
 	width = w;
 	height = h;
 };
+void CTriangle::GetDate(int& w, int& h, CString& t, int& a)
+{
+	w = width;
+	h = height;
+}
 
 
 
@@ -347,7 +362,7 @@ void CCircle::Draw(CDC* pDC)//绘制图形函数
 
 bool CCircle::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ((pow (double(pnt.x-OrgX),2)+pow(double(pnt.y-OrgY),2))<=pow(double(width/2),2))
+	if ((pow (double(pnt.x-OrgX),2)+pow(double(pnt.y-OrgY),2))<=pow(double(width/2+ BorderWidth/2),2))
 		return true;
 	else
 		return false;
@@ -358,6 +373,11 @@ void CCircle::SetDate(int x, int y, int w, int h, int a)
 	OrgY = y;
 	width = w;
 };
+void CCircle::GetDate(int& w, int& h, CString& t, int& a)
+{
+	w = width;
+	h = width;
+}
 
 
 
@@ -435,7 +455,7 @@ void CEllipse::Draw(CDC* pDC)//绘制图形函数
 
 bool CEllipse::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ((pow(double(pnt.x-OrgX),2)/pow(double(width/2),2)+pow(double(pnt.y-OrgY),2)/pow(double(height/2),2))<=1)
+	if ((pow(double(pnt.x - OrgX), 2) / pow(double(width / 2), 2) + pow(double(pnt.y - OrgY), 2) / pow(double(height / 2), 2)) <= sqrt(1 + BorderWidth/2))
 		return true;
 	else
 		return false;
@@ -447,6 +467,13 @@ void CEllipse::SetDate(int x, int y, int w, int h, int a)
 	width = w;
 	height = h;
 };
+void CEllipse::GetDate(int& w, int& h, CString& t, int& a)
+{
+	w = width;
+	h = height;
+}
+
+
 
 
 
@@ -466,6 +493,7 @@ void CText::Serialize(CArchive &ar)
 		ar << width;
 		ar << height;
 		ar << angle;
+		ar << text;
 	}
 	else
 	{
@@ -481,6 +509,7 @@ void CText::Serialize(CArchive &ar)
 		ar >> width;
 		ar >> height;
 		ar >> angle;
+		ar >> text;
 	}
 }
 CText::CText()
@@ -491,13 +520,14 @@ CText::CText()
 	angle = 100;
 }
 
-CText::CText(int x, int y, int w, int h, int a)
+CText::CText(int x, int y, int w, int h, int a, CString t)
 {
 	OrgX = x;
 	OrgY = y;
 	width = w;
 	height = h;
 	angle = a;
+	text = t;
 	BorderWidth = 1;
 	BorderColor = RGB(255, 0, 0);
 	BorderType = PS_SOLID;
@@ -513,22 +543,32 @@ void CText::Draw(CDC* pDC)//绘制图形函数
 	pNewFont->CreateFont(height,width,angle*10,0,200,FALSE,0,FALSE,ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH&FF_SWISS,"Aerial");
 	pOldFont = (CFont *)pDC->SelectObject(pNewFont);
 	pDC->SetTextColor(BorderColor);
-	pDC->TextOutA(OrgX, OrgY, "CText CText!");
+	pDC->TextOutA(OrgX, OrgY, text);
 
 }
 
 bool CText::IsMatched(CPoint pnt)//图元匹配函数
 {
-	if ( ( pnt.y-OrgY+tan((angle/180.0)*M_PI)*(pnt.x-OrgX))>=0 && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))<= 0  && ( pnt.y-OrgY+tan((angle/180.0)*M_PI)*(pnt.x-OrgX))<=height/cos(angle/180.0*M_PI) && (pnt.y-OrgY-1/(tan(angle/180.0* M_PI))*(pnt.x-OrgX))>= (-(width*12 /*字符数，动态字符可用GetLength()获得*/)/sin(angle/180.0*M_PI)))
+	int tt = text.GetLength();
+	if ( ( pnt.y-OrgY+tan(((angle/180.0))*M_PI)*(pnt.x-OrgX))>=0 && (pnt.y-OrgY-1/(tan((angle+0.00001)/180.0* M_PI))*(pnt.x-OrgX))<= 0  && ( pnt.y-OrgY+tan((angle/180.0)*M_PI)*(pnt.x-OrgX))<=height/cos(angle/180.0*M_PI) && (pnt.y-OrgY-1/(tan((angle +0.00001)/180.0* M_PI))*(pnt.x-OrgX))>= (-(width*tt)/sin(angle/180.0*M_PI)))
 		return true;
 	else
 		return false;
 }
 void CText::SetDate(int x, int y, int w, int h, int a)
 {
+	int tt = text.GetLength();
 	OrgX = x;
 	OrgY = y;
-	width = w;
+	width = w/tt;
 	height = h;
 	angle = a;
 };
+void CText::GetDate(int& w, int& h, CString& t, int& a)
+{
+	int tt = text.GetLength();
+	w = width*tt;
+	h = height;
+	t = text;
+	a = angle;
+}

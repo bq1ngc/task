@@ -14,10 +14,11 @@ IMPLEMENT_DYNAMIC(CType, CDialogEx)
 
 CType::CType(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CType::IDD, pParent)
+	, m_Text(_T("XinRoom"))
 {
 	m_Angle = 30;
-	m_Height = 100;
-	m_Width = 200;
+	m_Height = 200;
+	m_Width = 100;
 	m_LineWidt = 1;
 	m_OrgX = 200;
 	m_OrgY = 200;
@@ -26,6 +27,7 @@ CType::CType(CWnd* pParent /*=NULL*/)
 	m_intFillType = 0;
 	color_Fill = RGB(205, 20, 0);  //color
 	color_Line = RGB(255, 0, 0);  //
+	indexx = 0;
 }
 
 CType::~CType()
@@ -53,6 +55,7 @@ void CType::DoDataExchange(CDataExchange* pDX)
 	DDX_CBString(pDX, IDC_TYType, m_strTYType);
 	DDX_LBIndex(pDX, IDC_LineType, m_intListType);
 	DDX_LBIndex(pDX, IDC_FillType, m_intFillType);
+	DDX_Text(pDX, IDC_EDIT_text, m_Text);
 }
 
 
@@ -85,18 +88,21 @@ BOOL CType::OnInitDialog()
 	{
 		m_TYType.AddString(coure_Type[i]);
 	}
-	int ind = ((CDrawingApp *)AfxGetApp())->m_index;
+	//int ind = ((CDrawingApp *)AfxGetApp())->m_index;
+	int ind = indexx;
 	m_TYType.SetCurSel(ind);
-	if(ind==5)
-		GetDlgItem(IDC_Angele)->ShowWindow(TRUE),GetDlgItem(IDC_STATIC00)->ShowWindow(TRUE);
+	if (ind == 5)
+		GetDlgItem(IDC_Angele)->ShowWindow(TRUE), GetDlgItem(IDC_STATIC00)->ShowWindow(TRUE),
+		GetDlgItem(IDC_EDIT_text)->ShowWindow(TRUE), GetDlgItem(IDC_STATIC012)->ShowWindow(TRUE);
+	if (isOR) { GetDlgItem(IDC_TYType)->EnableWindow(FALSE);}
 	for (int i=0;i<3;i++)
 	{
 		m_LineType.AddString(coure_Line[i]);
 		m_FillType.AddString(coure_Fill[i]);
 	}
-	m_LineType.SetCurSel(0);
-	m_FillType.SetCurSel(0);
-	((CDrawingApp *)AfxGetApp())->m_index = m_TYType.GetCurSel();
+	m_LineType.SetCurSel(m_intListType);
+	m_FillType.SetCurSel(m_intFillType);
+	/*((CDrawingApp *)AfxGetApp())->m_index*/ indexx = m_TYType.GetCurSel();
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }
@@ -114,8 +120,8 @@ void CType::OnBnClickedOk()
 void CType::OnCbnSelchangeTytype()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	int isSel=((CDrawingApp *)AfxGetApp())->m_index = m_TYType.GetCurSel();
-	switch (isSel)
+	/*((CDrawingApp *)AfxGetApp())->m_index*/ indexx = m_TYType.GetCurSel();
+	switch (indexx)
 	{
 	case 0:
 	case 1:
@@ -124,10 +130,12 @@ void CType::OnCbnSelchangeTytype()
 	case 4:
 		GetDlgItem(IDC_Angele)->ShowWindow(FALSE);
 		GetDlgItem(IDC_STATIC00)->ShowWindow(FALSE);
+		GetDlgItem(IDC_EDIT_text)->ShowWindow(FALSE), GetDlgItem(IDC_STATIC012)->ShowWindow(FALSE);
 		break;
 	case 5:
 		GetDlgItem(IDC_Angele)->ShowWindow(TRUE);
 		GetDlgItem(IDC_STATIC00)->ShowWindow(TRUE);
+		GetDlgItem(IDC_EDIT_text)->ShowWindow(TRUE), GetDlgItem(IDC_STATIC012)->ShowWindow(TRUE);
 		break;
 	}
 }

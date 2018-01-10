@@ -19,6 +19,10 @@
 #include "Shape.h"
 #include "Type.h"
 // CDrawingView
+#include "MainFrm.h"
+
+CShape * cp = NULL, *crp = NULL;
+
 
 IMPLEMENT_DYNCREATE(CDrawingView, CScrollView)
 
@@ -27,10 +31,15 @@ BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
 	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CDrawingView::OnFilePrintPreview)
-	ON_WM_CONTEXTMENU()
-	ON_WM_RBUTTONUP()
+//	ON_WM_CONTEXTMENU()
+//	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDBLCLK()
+	ON_WM_LBUTTONDBLCLK()
+	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CDrawingView 构造/析构
@@ -63,14 +72,30 @@ void CDrawingView::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
+	CSize sizeTotal;
+	sizeTotal.cx = sizeTotal.cy = 0;
+	int mw,mh,ma; CString mt;
+
 	for (int i = 0; i < pDoc->m_Elements.GetCount(); i++)
 	{
 		CShape* p = (CShape*)pDoc->m_Elements[i];
 	
 		if (p != nullptr)
+		{
 			p->Draw(pDC);
-	}
+			p->GetDate(mw, mh, mt, ma);
+			if (mw+p->OrgX > sizeTotal.cx) 
+			{
+				sizeTotal.cx = mw+ p->OrgX;
+			}
+			if (mh+p->OrgY > sizeTotal.cy)
+			{
+				sizeTotal.cy = mh+ p->OrgY;
+			}
+		}
 
+	}
+	SetScrollSizes(MM_TEXT, sizeTotal);
 }
 
 void CDrawingView::OnInitialUpdate()
@@ -108,19 +133,6 @@ void CDrawingView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 void CDrawingView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
 {
 	// TODO: 添加打印后进行的清理过程
-}
-
-void CDrawingView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	//ClientToScreen(&point);
-	//OnContextMenu(this, point);
-}
-
-void CDrawingView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
-{
-#ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
-#endif
 }
 
 
@@ -169,7 +181,8 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		if(dlg.DoModal()==IDOK)
 		{
-			int index = ((CDrawingApp *)AfxGetApp())->m_index;
+			//int index = /*((CDrawingApp *)AfxGetApp())->m_index*/ dlg.m_TYType.GetCurSel();
+			int index = dlg.indexx;
 			switch (index)
 			{
 			case 0:
@@ -208,7 +221,7 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 				pDoc->UpdateAllViews(NULL);
 				break;
 			case 5:
-				p = new CText(dlg.m_OrgX, dlg.m_OrgY, dlg.m_Width,dlg.m_Height, dlg.m_Angle);
+				p = new CText(dlg.m_OrgX, dlg.m_OrgY, dlg.m_Width,dlg.m_Height, dlg.m_Angle, dlg.m_Text);
 				p->SetBase(TEXT, dlg.color_Line, dlg.m_intListType, dlg.m_LineWidt, dlg.color_Fill, dlg.m_intFillType);
 				pDoc->m_Elements.Add(p);
 				pDoc->SetModifiedFlag();
@@ -219,22 +232,19 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else
 	{
-		for ( int i = 0; i < pDoc->m_Elements.GetCount(); i++)
+		for (int i = 0; i < (pDoc->m_Elements.GetSize()); i++)
 		{
-			p = (CShape*)pDoc->m_Elements[i];
-			if (p != nullptr && p->IsMatched(pntLogical))
+			CShape* pp = (CShape*)pDoc->m_Elements[i];
+
+			if (pDoc->m_Elements[i] != NULL && pp->IsMatched(pntLogical))
 			{
-				((CDrawingApp *)AfxGetApp())->m_index = p->GetDate();
-				if (dlg.DoModal() == IDOK) {
-					p->SetBase(p->GetDate(), dlg.color_Line, dlg.m_intListType, dlg.m_LineWidt, dlg.color_Fill, dlg.m_intFillType);
-					p->SetDate(dlg.m_OrgX, dlg.m_OrgY, dlg.m_Width, dlg.m_Height, dlg.m_Angle);
-					pDoc->SetModifiedFlag();
-					pDoc->UpdateAllViews(NULL);
-				}
+				p1.x = pntLogical.x, p1.y = pntLogical.y;
+				cp = pp;
+				break;
 			}
 		}
-		pDoc->SetModifiedFlag();
-		pDoc->UpdateAllViews(NULL);
+
+	isDown = 1;
 	}
 
 	CScrollView::OnLButtonDown(nFlags, point);
@@ -263,4 +273,161 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 	pDoc->UpdateAllViews(NULL);
 
 	CScrollView::OnRButtonDblClk(nFlags, point);
+}
+
+
+void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	CDrawingDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)	return;
+
+	CClientDC dc(this);
+	CPoint pntLogical = point;
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&pntLogical);//DP->LP进行转换
+
+	CType dlg;
+	dlg.m_OrgX = pntLogical.x;
+	dlg.m_OrgY = pntLogical.y;
+	CShape* p = NULL;
+
+	for (int i = 0; i < pDoc->m_Elements.GetCount(); i++)
+	{
+		p = (CShape*)pDoc->m_Elements[i];
+		if (p != nullptr && p->IsMatched(pntLogical))
+		{
+			dlg.indexx/*((CDrawingApp *)AfxGetApp())->m_index*/ = p->GetDate();
+			p->GetBase(dlg.color_Line, dlg.m_intListType, dlg.m_LineWidt, dlg.color_Fill, dlg.m_intFillType);
+			p->GetDate(dlg.m_Width, dlg.m_Height, dlg.m_Text, dlg.m_Angle);
+			dlg.isOR = 1;
+			if (dlg.DoModal() == IDOK) {
+				p->SetBase(p->GetDate(), dlg.color_Line, dlg.m_intListType, dlg.m_LineWidt, dlg.color_Fill, dlg.m_intFillType);
+				p->SetDate(dlg.m_OrgX, dlg.m_OrgY, dlg.m_Width, dlg.m_Height, dlg.m_Angle);
+				//if (p->GetDate() == TEXT) { p->SetText(dlg.m_Text); }
+				pDoc->SetModifiedFlag();
+				pDoc->UpdateAllViews(NULL);
+			}
+		}
+	}
+	dlg.isOR = 0;
+
+	CScrollView::OnLButtonDblClk(nFlags, point);
+}
+
+
+void CDrawingView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	isDown = 0;
+
+	CScrollView::OnLButtonUp(nFlags, point);
+}
+
+
+void CDrawingView::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	isRDown = 1;
+
+	CDrawingDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)	return;
+
+	CClientDC dc(this);
+	CPoint pntLogical = point;
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&pntLogical);
+
+	for (int i = 0; i < (pDoc->m_Elements.GetSize()); i++)
+	{
+		CShape* pp = (CShape*)pDoc->m_Elements[i];
+
+		if (pDoc->m_Elements[i] != NULL && pp->IsMatched(pntLogical))
+		{
+			crp = pp;
+			break;
+		}
+	}
+
+	CScrollView::OnRButtonDown(nFlags, point);
+}
+
+
+void CDrawingView::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	isRDown = 0;
+
+
+	CScrollView::OnRButtonUp(nFlags, point);
+}
+
+
+void CDrawingView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CClientDC dc(this);
+	CPoint pntLogical = point;
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&pntLogical);
+	CString x, y;
+	x.Format(_T("%d"), pntLogical.x);//整型转字符串  
+	y.Format(_T("%d"), pntLogical.y);
+	CString text = "像素点:" + x + "," + +y;
+
+	CMainFrame *pFrame = (CMainFrame*)AfxGetMainWnd();
+	pFrame->m_wndStatusBar.SetPaneText(0, text);//修改原有的状态栏上就绪一栏的信息    
+	//pFrame->m_wndStatusBar.SetPaneText(1, "打开成功！");//修改原有的状态栏上CAP一栏的信息  
+	//pFrame->m_wndStatusBar.SetPaneText(2, "打开成功！");//修改原有的状态栏上NUM一栏的信息  
+	//pFrame->m_wndStatusBar.SetPaneText(3, "打开成功！");//修改原有的状态栏上SCRL一栏的信息  
+
+	if (isDown&&cp != NULL) {
+		pFrame->m_wndStatusBar.SetPaneText(3, "down!");
+		int mw, mh, ma; CString mt;
+
+		CDrawingDoc* pDoc = GetDocument();
+		ASSERT_VALID(pDoc);
+		if (!pDoc)	return;
+
+		CClientDC dc(this);
+		CPoint pntLogical = point;
+		OnPrepareDC(&dc);
+		dc.DPtoLP(&pntLogical);
+
+
+		cp->GetDate(mw, mh, mt ,ma);
+		int ww = fabs(pntLogical.x - cp->OrgX), hh = fabs(pntLogical.y - cp->OrgY), aa = ma; CString tt = mt;
+
+		cp->SetDate(cp->OrgX, cp->OrgY,ww, hh, aa);
+		pDoc->SetModifiedFlag();
+		pDoc->UpdateAllViews(NULL);
+
+
+	}
+	else {
+		pFrame->m_wndStatusBar.SetPaneText(3, "up!");
+		cp = NULL;
+		p1.x = 0;
+	};
+
+	if (isRDown&&crp != NULL)
+	{
+		pFrame->m_wndStatusBar.SetPaneText(3, "down!");
+		CDrawingDoc* pDoc = GetDocument();
+		ASSERT_VALID(pDoc);
+		if (!pDoc)	return;
+
+		crp->OrgX = pntLogical.x, crp->OrgY = pntLogical.y;
+		pDoc->SetModifiedFlag();
+		pDoc->UpdateAllViews(NULL);
+	}
+	else {
+		pFrame->m_wndStatusBar.SetPaneText(3, "up!");
+		crp = NULL;
+	}
+
+	CScrollView::OnMouseMove(nFlags, point);
 }
