@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class: cn.xinroom.Tetris.Drawing,cn.xinroom.Tetris.Shape,cn.xinroom.Tetris.Test
+Main-Class: cn.xinroom.Tetris.Test
+Created-By: XinRoom
