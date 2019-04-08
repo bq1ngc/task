@@ -126,7 +126,7 @@ def down(m3u8url, m3u8name, downdir):
                 time.sleep(args.time / 1000)
 
     # 解密处理后的m3u8 文件尾
-    with open(os.path.join(filedir, filename + ".m3u8"), 'aw') as f:
+    with open(os.path.join(filedir, filename + ".m3u8"), 'a') as f:
         f.write("#EXT-X-ENDLIST")
     
     print("处理完毕")
