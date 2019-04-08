@@ -12,6 +12,7 @@
 * [turtle树](//github.com/XinRoom/task/blob/master/python/tree.py)
 * [tkinter](//github.com/XinRoom/task/blob/master/python/Python_tk_V3.py)
 * [tkinter 文件管理器](//github.com/XinRoom/task/blob/master/python/File_Manager.py)
+* [m3u8 aes解密](//github.com/XinRoom/task/blob/master/python/m3u8.py)
 
 ### C++
 * [第一次c++课程设计-Drawing](//github.com/XinRoom/task/tree/master/c++/curriculum_design_first)
